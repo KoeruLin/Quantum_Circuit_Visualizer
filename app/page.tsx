@@ -1,10 +1,13 @@
+import XButton from './gates/x_gate/XButton'
+
 export default function Home() {
     return (
         <html>
-        <body>
-        <header>
-        </header>
-        </body>
+            <body>
+                <div>
+                    <XButton />
+                </div>
+            </body>
         </html>
     );
 }
