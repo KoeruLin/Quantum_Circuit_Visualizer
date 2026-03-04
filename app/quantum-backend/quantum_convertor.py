@@ -46,24 +46,20 @@ def get_gate(gate: str, theta: float = 0.0, phi: float = 0.0, lamda: float = 0.0
 
 @app.post("/calculations")
 def calculations(circuit_input: CircuitStructure):
+    bloch_sphere_coordinates = []
     circuit = QuantumCircuit(1)
 
     for gate_input in circuit_input.circuit:
         circuit.append(get_gate(gate_input.gate, gate_input.theta, gate_input.phi, gate_input.lamda),
                        gate_input.qubits)
-
-    vector = Statevector(circuit)
-    alpha = vector.data[0]
-    beta = vector.data[1]
-    x_coordinate = round(float(2 * (alpha * beta.conj()).real), 5)
-    y_coordinate = round(float(2 * (alpha * beta.conj()).imag), 5)
-    z_coordinate = round(float(np.abs(alpha) ** 2 - np.abs(beta) ** 2), 5)
-    print(circuit)
-    print(vector)
-    print(x_coordinate, y_coordinate, z_coordinate)
+        vector = Statevector(circuit)
+        alpha = vector.data[0]
+        beta = vector.data[1]
+        x_coordinate = round(float(2 * (alpha * beta.conj()).real), 5)
+        y_coordinate = round(float(2 * (alpha * beta.conj()).imag), 5)
+        z_coordinate = round(float(np.abs(alpha) ** 2 - np.abs(beta) ** 2), 5)
+        bloch_sphere_coordinates.append([x_coordinate, y_coordinate, z_coordinate])
 
     return {
-        "x-coordinate": x_coordinate,
-        "y-coordinate": y_coordinate,
-        "z-coordinate": z_coordinate
+        "bloch_sphere_coordinates": bloch_sphere_coordinates
     }
