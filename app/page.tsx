@@ -1,12 +1,12 @@
-import XButton from './gates/x_gate/XButton'
+'use client'
+import GateMenu from "@/app/gate_menu";
+import 'tailwindcss'
 
 export default function Home() {
     return (
         <html>
             <body>
-                <div>
-                    <XButton />
-                </div>
+            <GateMenu />
             </body>
         </html>
     );

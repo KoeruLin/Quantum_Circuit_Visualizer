@@ -1,39 +1,29 @@
 'use client'
 import XGate from "@/app/gates/x_gate/X";
-import React, { useState } from 'react'
-import {svgCoordinateConversion} from "@/app/gates/gate_movement";
+import React, { useState, useCallback } from 'react'
+import {svgCoordinateConversion, gate} from "@/app/gates/utilities";
 
-interface gate {
-    id: number;
-    x: number;
-    y: number;
-}
-
-export default function XButton() {
+export default function XButton(props: {visibility: boolean}) {
     const [gates, setGates] = useState<gate[]>([]);
 
-    function handleSVGClick(e: React.MouseEvent<SVGSVGElement>): void {
-        const coordinate =
-            svgCoordinateConversion(e) ?? {x: 0, y: 0};
+    const handleSVGClick = useCallback((e: React.MouseEvent<SVGRectElement>): void => {
+        const coordinate = svgCoordinateConversion(e) ?? {x: 0, y: 0};
         setGates(prev => [...prev, {id: prev.length, x: coordinate.x, y: coordinate.y}]);
-    }
+    }, [])
 
     return (
-        <>
-            <svg width="100vw" height="100vh" className="border">
+        <div className={props.visibility ? "block" : "hidden"} style={{position: 'relative'}}>
+            <svg width={100} height={100} style={{ overflow: 'visible' }}>
                 <rect
-                    x={50}
-                    y={50}
                     width={100}
                     height={100}
-                    fill="purple"
-                    style={{ cursor: 'pointer' }}
+                    fill="cyan"
                     onClick={handleSVGClick}
                 />
-                {gates.map((gate) => (
+                {gates.map(gate => (
                     <XGate key={gate.id} xPosition={gate.x} yPosition={gate.y} />
                 ))}
             </svg>
-        </>
+        </div>
     )
 }
